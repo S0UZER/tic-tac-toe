@@ -34,13 +34,15 @@ function renderGrid (dimension) {
 }
 
 function cellClickHandler (row, col) {
-    // Пиши код тут
+  if (gameOver) return;
+  if (field[row][col] !== EMPTY) return;
+
+  field[row][col] = currentPlayer;
+  renderSymbolInCell(currentPlayer, row, col);
+
+  currentPlayer = currentPlayer === CROSS ? ZERO : CROSS;
     console.log(`Clicked on cell: ${row}, ${col}`);
 
-
-    /* Пользоваться методом для размещения символа в клетке так:
-        renderSymbolInCell(ZERO, row, col);
-     */
 }
 
 function renderSymbolInCell (symbol, row, col, color = '#333') {
