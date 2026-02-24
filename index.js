@@ -2,13 +2,20 @@ const CROSS = 'X';
 const ZERO = 'O';
 const EMPTY = ' ';
 
+let size = 3;
+let field;
+let currentPlayer;
+let gameOver;
 const container = document.getElementById('fieldWrapper');
 
 startGame();
 addResetListener();
 
 function startGame () {
-    renderGrid(3);
+  field = Array.from({ length: size }, () => Array(size).fill(EMPTY));
+  currentPlayer = CROSS;
+  gameOver = false;
+  renderGrid(size);
 }
 
 function renderGrid (dimension) {
