@@ -33,21 +33,34 @@ function renderGrid (dimension) {
     }
 }
 
-function cellClickHandler (row, col) {
+function cellClickHandler(row, col) {
   if (gameOver) return;
   if (field[row][col] !== EMPTY) return;
 
   field[row][col] = currentPlayer;
   renderSymbolInCell(currentPlayer, row, col);
 
+  const win = checkWinner();
+
+  if (win) {
+    win.cells.forEach(([r, c]) =>
+      renderSymbolInCell(field[r][c], r, c, 'red')
+    );
+
+    alert(`Победил ${win.player}`);
+    gameOver = true;
+    return;
+  }
+
   if (isDraw()) {
     alert('Победила дружба');
     gameOver = true;
     return;
   }
+
+
   currentPlayer = currentPlayer === CROSS ? ZERO : CROSS;
 }
-
 function renderSymbolInCell (symbol, row, col, color = '#333') {
     const targetCell = findCell(row, col);
 
@@ -72,7 +85,50 @@ function resetClickHandler () {
 function isDraw() {
   return field.flat().every(cell => cell !== EMPTY);
 }
+function checkWinner() {
 
+  for (let i = 0; i < size; i++) {
+    if (field[i][0] !== EMPTY &&
+        field[i].every(cell => cell === field[i][0])) {
+      return {
+        player: field[i][0],
+        cells: field[i].map((_, j) => [i, j])
+      };
+    }
+  }
+
+  for (let j = 0; j < size; j++) {
+    const column = field.map(row => row[j]);
+
+    if (column[0] !== EMPTY &&
+        column.every(cell => cell === column[0])) {
+      return {
+        player: column[0],
+        cells: column.map((_, i) => [i, j])
+      };
+    }
+  }
+
+  const diag1 = field.map((row, i) => row[i]);
+
+  if (diag1[0] !== EMPTY && diag1.every(c => c === diag1[0])) {
+    return {
+      player: diag1[0],
+      cells: diag1.map((_, i) => [i, i])
+    };
+  }
+
+  const diag2 = field.map((row, i) => row[size - i - 1]);
+
+  if (diag2[0] !== EMPTY && diag2.every(c => c === diag2[0])) {
+    return {
+      player: diag2[0],
+      cells: diag2.map((_, i) => [i, size - i - 1])
+    };
+  }
+
+  return null;
+}
 
 /* Test Function */
 /* Победа первого игрока */
