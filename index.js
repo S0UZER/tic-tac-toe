@@ -40,9 +40,12 @@ function cellClickHandler (row, col) {
   field[row][col] = currentPlayer;
   renderSymbolInCell(currentPlayer, row, col);
 
+  if (isDraw()) {
+    alert('Победила дружба');
+    gameOver = true;
+    return;
+  }
   currentPlayer = currentPlayer === CROSS ? ZERO : CROSS;
-    console.log(`Clicked on cell: ${row}, ${col}`);
-
 }
 
 function renderSymbolInCell (symbol, row, col, color = '#333') {
@@ -64,6 +67,10 @@ function addResetListener () {
 
 function resetClickHandler () {
     console.log('reset!');
+}
+
+function isDraw() {
+  return field.flat().every(cell => cell !== EMPTY);
 }
 
 
