@@ -79,7 +79,7 @@ function addResetListener () {
 }
 
 function resetClickHandler () {
-    console.log('reset!');
+    startGame();
 }
 
 function isDraw() {
